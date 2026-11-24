@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="theme-color" content="#0b0b0e" />
+<title>Welcome — A Personal Story</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap');
+
+  :root {
+    --bg: #0b0b0e;
+    --surface: #121217;
+    --text: #f3f0eb;
+    --muted: #a6a1a0;
+    --accent: #c6a7ff;
+    --line: rgba(255,255,255,.11);
+    --serif: "Playfair Display", Georgia, serif;
+    --sans: "DM Sans", Arial, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background:
+      radial-gradient(ellipse at 80% 10%, rgba(126, 88, 180, .13), transparent 34rem),
+      radial-gradient(ellipse at 5% 55%, rgba(68, 104, 128, .10), transparent 30rem),
+      var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.8;
+    overflow-x: hidden;
+  }
+
+  .progress {
+    position: fixed; inset: 0 auto auto 0; height: 2px; width: 0;
+    background: var(--accent); z-index: 20;
+    box-shadow: 0 0 12px rgba(198,167,255,.65);
+  }
+
+  .page { width: min(100% - 40px, 900px); margin: 0 auto; }
+  .hero { padding-top: clamp(28px, 6vw, 76px); }
+  .hero-image, .ending-image {
+    position: relative; overflow: hidden; border-radius: 22px;
+    background: linear-gradient(135deg, #272331, #171c26 55%, #34243a);
+    border: 1px solid var(--line);
+  }
+  .hero-image { height: clamp(260px, 54vw, 570px); }
+  .hero-image img, .ending-image img {
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    transition: transform 1.2s cubic-bezier(.2,.7,.2,1);
+  }
+  .hero-image:hover img, .ending-image:hover img { transform: scale(1.035); }
+  .image-placeholder {
+    position: absolute; inset: 0; display: grid; place-items: center;
+    color: rgba(255,255,255,.62); text-align: center; padding: 24px;
+    font-size: .85rem; letter-spacing: .12em; text-transform: uppercase;
+  }
+
+  .intro { padding: clamp(58px, 10vw, 108px) 0 44px; }
+  .eyebrow {
+    color: var(--accent); text-transform: uppercase; letter-spacing: .22em;
+    font-size: .7rem; font-weight: 700; margin: 0 0 18px;
+  }
+  h1, h2, h3, p { margin-top: 0; }
+  h1 {
+    font: 600 clamp(2.7rem, 8vw, 5.8rem)/1.08 var(--serif);
+    letter-spacing: -.045em; max-width: 800px; margin-bottom: 28px;
+  }
+  h1 span { color: var(--accent); }
+  .lead {
+    max-width: 690px; color: var(--muted); font-size: clamp(1rem, 2vw, 1.15rem);
+    line-height: 1.95;
+  }
+
+  section.content-section { padding: 54px 0; border-top: 1px solid var(--line); }
+  .section-label {
+    color: var(--accent); font-size: .72rem; letter-spacing: .2em;
+    text-transform: uppercase; font-weight: 700; margin-bottom: 14px;
+  }
+  h2 {
+    font: 600 clamp(2rem, 5vw, 3.4rem)/1.15 var(--serif);
+    letter-spacing: -.025em; margin-bottom: 22px;
+  }
+  .body-copy { max-width: 700px; color: var(--muted); font-size: 1.02rem; }
+  .how-title { margin-bottom: 34px; }
+
+  .steps { display: grid; gap: 0; }
+  .step {
+    display: grid; grid-template-columns: 90px 1fr; gap: 22px;
+    padding: 28px 0; border-top: 1px solid var(--line);
+  }
+  .step-number {
+    color: var(--accent); font: 600 1.2rem var(--serif);
+    padding-top: 3px;
+  }
+  h3 { font: 600 1.3rem var(--serif); margin-bottom: 9px; }
+  .step p { color: var(--muted); margin: 0; max-width: 620px; }
+
+  .ending { padding: 70px 0 100px; text-align: center; }
+  .ending-image { height: clamp(210px, 38vw, 390px); margin-bottom: 38px; }
+  .thanks {
+    font: 600 clamp(2.7rem, 8vw, 5rem)/1.1 var(--serif);
+    letter-spacing: -.04em; margin: 0;
+  }
+  .thanks span { color: var(--accent); }
+  footer {
+    border-top: 1px solid var(--line); color: #77727a; text-align: center;
+    padding: 22px 10px 30px; font-size: .75rem; letter-spacing: .08em;
+  }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s ease, transform .8s cubic-bezier(.2,.7,.2,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  @media (max-width: 600px) {
+    .page { width: min(100% - 30px, 900px); }
+    .step { grid-template-columns: 58px 1fr; gap: 12px; }
+    section.content-section { padding: 42px 0; }
+    .hero-image, .ending-image { border-radius: 15px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+
+<main class="page">
+  <!-- TOP IMAGE: Replace the src with your image path, e.g. images/cover.jpg -->
+  <header class="hero reveal">
+    <div class="hero-image">
+      <img src="YOUR-TOP-IMAGE.jpg" alt="Main feature image"
+           onerror="this.style.display='none';" />
+      <div class="image-placeholder"><img src="https://instagram.fhyd5-2.fna.fbcdn.net/v/t51.82787-19/756746200_18081114716285672_2735352664625691505_n.jpg?_nc_cat=110&_nc_map=urlgen_bucketless&ig_cache_key=GNgHGy3oqs6TrTxAAHG7bobB7PUlbmNDAQAB0j-ccb7-5&ccb=7-5&_nc_sid=669407&efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLnd3dy4xMDgwLkMzIn0%3D&_nc_ohc=fzUFCzBADmoQ7kNvwG1O8d9&_nc_oc=Adp8xpGw5LPboyuTw5L1iVpa8DAnKdJwj-WP9GwoXbJLaV9Q73PLpboloXMRiN6Xj8E&_nc_zt=24&_nc_ht=instagram.fhyd5-2.fna&_nc_gid=IuuosKe-DfqoDF8NfG1LVA&_nc_ss=7b7a8&_nc_ct=RQosPBUCFQIAAAA&oh=00_AQRm12LMRw-Suf6hxHC9JOwJivlV8jCqcG7PSh7_nn67Ng&oe=6B0B7789" alt=""></div>
+    </div>
+  </header>
+
+  <div class="intro reveal">
+    <p class="eyebrow">A little introduction</p>
+    <h1>Welcome to <span>PACCHI BUDDAL.COM</span></h1>
+    <p class="lead">He is THE PACCHI BUDDAL, a fabolous masterpiece.he is a unique creature.He does very strange acts.He acts like a peanut because he is a size of a peanut.He got this name THE PACCHI BUDDAL through many sacrifices.It is a long story.<br></p>
+      <p class="lead">He has evolved form the a single peanut which had fallen from the peanut tree into the MAMA TEA CLUB and had fallen into the tea of a short person.The person drank the tea without realising.The son of this person is him.</p>
+      <p class="lead">YEAH,HE HAS GONE THROUG MANY SACRIFICES😭</p>
+  </div>
+
+  <section class="content-section reveal">
+    <p class="section-label">01 / Interests</p>
+    <h2>What he likes to do</h2>
+    <p class="body-copy">He likes to play around like a peanut and get his aura in negative.Let me explain, first of all he roasts everyone, like its his job.And he thinks he is cool.But he is not</p>
+    <p class="body-copy">but the most interesting part in him is how he makes tea in MAMA TEA CLUB.He carefully selects the finest peanuts and brews them to perfection, creating a unique tea experience that is truly one-of-a-kind.And also adds limited edition ingredients to enhance the flavor.</p>
+  </section>
+
+  <section class="content-section reveal">
+    <p class="section-label">02 / The process</p>
+    <h2 class="how-title">How to make it</h2>
+
+    <div class="steps">
+      <article class="step">
+        <div class="step-number">STEP 01</div>
+        <div>
+          <h3>Step 1 — Ingredient selection</h3>
+          <p>Choose the finest peanuts from the MAMA TEA CLUB's selection. Look for peanuts that are plump, fresh, and have a rich aroma.He milk from a limited edition cow whose serial number is 411 and he named is DAKSHU.These will be the base of your tea.</p>
+        </div>
+      </article>
+      <article class="step">
+        <div class="step-number">STEP 02</div>
+        <div>
+          <h3>Step 2 — Brewing</h3>
+          <p>In a traditional tea pot, combine the selected peanuts with water at the perfect temperature. Allow the mixture to steep, letting the flavors meld together. The brewing process is crucial for achieving the desired taste.The smell of the TEA attracts the cow to him</p>
+        </div>
+      </article>
+      <article class="step">
+        <div class="step-number">STEP 03</div>
+        <div>
+          <h3>Step 3 — Ready to serve</h3>
+        <p>Once the tea has brewed to perfection, it's time to serve. Pour the tea into cups, ensuring each serving has a rich, nutty flavor. The unique blend of ingredients will create a memorable tea experience for The PACCHI BUDDAL and his cow </p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="ending reveal">
+    
+    <p class="eyebrow">The end</p>
+    <h2 class="thanks">Thank <span>You.</span></h2>
+  </section>
+</main>
+
+<footer>MADE WITH CARE · [YOUR NAME / PROJECT]</footer>
+
+<script>
+  // Reveal sections smoothly as they enter the screen.
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Thin reading progress line at the top.
+  const progress = document.getElementById('progress');
+  window.addEventListener('scroll', () => {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const amount = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    progress.style.width = amount + '%';
+  }, { passive: true });
+</script>
+</body>
+</html>
